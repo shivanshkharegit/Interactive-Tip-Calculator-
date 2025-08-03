@@ -1,0 +1,189 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link
+    rel = "icon"
+    type = "image/png"
+    sizes="32x32"
+    href="./images/kj_white.ico"/> 
+    <script src="https://cdn.jsdelivr.net/npm/@tailwindcss/browser@4"></script>
+    <script defer src="./script.js"></script> 
+    <title>Tip calculator app</title>
+    <style>
+        @import url("https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400;1,700&display=swap");
+    </style>
+     <style type="text/tailwindcss">
+      input[type="number"]::-webkit-outer-spin-button,
+      input[type="number"]::-webkit-inner-spin-button {
+        -webkit-appearance: none;
+        margin: 0;
+      }
+
+      /* Firefox */
+      input[type="number"] {
+        -moz-appearance: textfield;
+      }
+
+      @theme {
+        --font-space: "Space Mono", monospace;
+        --color-green-400: hsl(172, 67%, 45%);
+        --color-green-900: hsl(183, 100%, 15%);
+        --color-grey-50: hsl(189, 47%, 97%);
+        --color-grey-200: hsl(185, 41%, 84%);
+        --color-grey-400: hsl(184, 14%, 56%);
+        --color-grey-500: hsl(186, 14%, 43%);
+      }
+      .btn {
+        @apply rounded-md bg-green-900 p-2 text-grey-50 cursor-pointer hover:bg-green-400 hover:text-green-900;
+      }
+      .btn-active {
+        @apply text-green-900 bg-green-400;
+      }
+      .error {
+        @apply focus:ring-red-500;
+      }
+    </style>
+</head>
+<body class="text-grey-500 font-space bg-grey-200 sm:min-h-screen flex flex-c ol justify-center items-center sm:p-8">
+    <img class="my-11 sm:mb-20 sm:mt-0" src="./images/logo.svg" alt="logo">
+    <div    class="max-w-md lg:max-w-5xl w-full bg-white rounded-t-3xl sm:rounded-3xl shadow-2xl shadow-green-900/15 p-6 sm:p-8 grid lg:grid-cols-2 gap-6 sm:gap-8">
+         <div class="space-y-6 sm:space-y-8 p-2">
+        <div class="flex flex-col gap-2">
+          <span class="font-semibold">Bill</span>
+          <div class="bg-grey-50 relative w-full rounded-md">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 rounded-md flex items-center pointer-events-none">
+              <img
+                class="h-5"
+                src="./images/icon-dollar.svg"
+                alt="dollar-icon" />
+            </div>
+            <input
+              id="bill-input"
+              name="bill"
+              class="w-full pl-10 pr-4 py-2 text-end font-bold text-2xl text-green-900 outline-none focus:ring-2 focus:ring-green-400 focus:rounded-md caret-green-400"
+              type="number"
+              placeholder="0" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-4">
+          <label class="font-semibold">Select Tip %</label>
+          <div class="grid grid-cols-3 gap-4 text-2xl font-bold">
+            <button
+              id="tip-5"
+              class="btn">
+              5%
+            </button>
+            <button
+              id="tip-10"
+              class="btn">
+              10%
+            </button>
+            <button
+              id="tip-15"
+              class="btn">
+              15%
+            </button>
+            <button
+              id="tip-25"
+              class="btn">
+              25%
+            </button>
+            <button
+              id="tip-50"
+              class="btn">
+              50%
+            </button>
+            <input
+              id="tip-input"
+              name="tip"
+              class="text-end w-full bg-grey-50 px-4 py-2 rounded-md placeholder:text-grey-500 text-green-900 outline-green-400 caret-green-400"
+              type="number"
+              placeholder="Custom" />
+          </div>
+        </div>
+
+        <div class="flex flex-col gap-2">
+          <div class="w-full flex justify-between">
+            <span class="font-semibold">Number of People</span>
+            <span id="error-label" class="font-semibold text-red-500 hidden">Cant&apos;t be Zero</span>
+          </div>
+          <div class="bg-grey-50 relative w-full rounded-md">
+            <div
+              class="absolute inset-y-0 left-0 pl-4 flex caret-green-400 items-center pointer-events-none">
+              <img
+                class="h-5"
+                src="./images/icon-person.svg"
+                alt="dollar-icon" />
+            </div>
+            <input
+              id="people-input"
+              name="people"
+              class="w-full pl-10 pr-4 py-2 text-end font-bold text-2xl text-green-900 outline-none focus:ring-2 focus:ring-green-400 focus:rounded-md"
+              type="number"
+              placeholder="0" />
+          </div>
+        </div>
+      </div>
+
+      <div
+        class="bg-green-900 rounded-2xl p-6 sm:p-8 space-y-10 h-full flex flex-col justify-between">
+        <div class="flex flex-col items-center gap-10">
+          <div class="w-full flex justify-between sm:mt-4">
+            <div class="flex flex-col gap-1">
+              <span class="font-semibold text-grey-50">Tip Amount</span>
+              <span class="font-semibold text-grey-400">/ person</span>
+            </div>
+            <span
+              class="flex items-center gap-1 text-4xl sm:text-5xl font-bold text-green-400">
+              <img
+                class="h-10"
+                src="./images/icon-dollar.svg"
+                alt="dollar-icon" />
+              <h1 id="tip">0.00</h1>
+            </span>
+          </div>
+
+          <div class="w-full flex justify-between">
+            <div class="flex flex-col gap-1">
+              <span class="font-semibold text-grey-50">Total</span>
+              <span class="font-semibold text-grey-400">/ person</span>
+            </div>
+            <span
+              class="flex items-center gap-1 text-4xl sm:text-5xl font-bold text-green-400">
+              <img
+                class="h-8"
+                src="./images/icon-dollar.svg"
+                alt="dollar-icon" />
+              <h1 id="total">0.00</h1>
+            </span>
+          </div>
+        </div>
+
+        <button
+          id="reset"
+          class="m-0 bg-green-400/30 hover:bg-green-400 rounded-md w-full p-2 cursor-pointer font-bold text-xl text-green-900/50 hover:text-green-900">
+          RESET
+        </button>
+      </div>
+    </div>
+
+    <footer class="text-[11px] lg:absolute bottom-4 mt-6 sm:mt-16">
+      Challenge by
+      <a
+        class="text-blue-500 underline"
+        href="https://www.frontendmentor.io?ref=challenge"
+        target="_blank"
+        >Frontend Mentor</a
+      >. Coded by
+      <a
+        class="text-blue-500 underline"
+        href="#"
+        >hell_obuggy</a
+      >.
+    </footer>
+</body>
+</html>
